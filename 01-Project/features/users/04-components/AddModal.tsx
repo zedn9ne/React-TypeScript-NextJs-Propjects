@@ -58,7 +58,6 @@ function AddModal(props: IAddUser) {
             }
           />
           <TextInput
-            error={"something"}
             placeholder="big-e-Masoud@email.com"
             label="Email"
             value={user.email}

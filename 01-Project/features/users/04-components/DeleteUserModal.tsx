@@ -1,5 +1,5 @@
 import { IUser } from "@/features/users/01-models/userModels";
-import { Button, Modal, Text } from "@mantine/core";
+import { Button, Center, Flex, Modal, Text } from "@mantine/core";
 import { forwardRef, useImperativeHandle, useState } from "react";
 
 export interface IDeleteUserModalProps {
@@ -23,26 +23,28 @@ const DeleteUserModal = forwardRef<IDeleteUserModalRef, IDeleteUserModalProps>(
     });
 
     return (
-      <Modal
-        opened={open}
-        onClose={() => {
-          setOpen(false);
-          setUser(undefined);
-        }}
-      >
-        <Text>{`حذف شود؟ ${user?.name}`}</Text>
-
-        <Button
-          onClick={() => {
-            if (user) {
-              props.OnDelete(user);
-              setOpen(false)
-            }
+      <Flex>
+        <Modal
+          opened={open}
+          onClose={() => {
+            setOpen(false);
+            setUser(undefined);
           }}
         >
-          Del
-        </Button>
-      </Modal>
+          <Text>{`حذف شود؟ ${user?.name}`}</Text>
+
+          <Button
+            onClick={() => {
+              if (user) {
+                props.OnDelete(user);
+                setOpen(false);
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </Modal>
+      </Flex>
     );
   },
 );

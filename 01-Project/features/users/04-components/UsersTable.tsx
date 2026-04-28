@@ -4,29 +4,37 @@ import { ActionIcon, Center, Flex, Table } from "@mantine/core";
 import { IUser } from "../01-models/userModels";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 
-function onDelete(user:IUser){
-
-}
+function onDelete(user: IUser) {}
 export interface IUsersTableProps {
-  Users: IUser[],
-  onDelete : (user : IUser) => void,
-  onUpdate : (user : IUser) => void,
+  Users: IUser[];
+  onDelete: (user: IUser) => void;
+  onUpdate: (user: IUser) => void;
 }
 
 function UsersTable(props: IUsersTableProps) {
   const rows = props.Users.map((user, index) => (
     <Table.Tr key={index}>
+      <Table.Td>{user.id}</Table.Td>
       <Table.Td>{user.name}</Table.Td>
       <Table.Td>{user.lastName}</Table.Td>
       <Table.Td>{user.phoneNumber}</Table.Td>
       <Table.Td>{user.email}</Table.Td>
       <Table.Td>
         <Flex columnGap={5}>
-          <ActionIcon onClick={()=> {props.onUpdate(user)}}>
+          <ActionIcon
+            onClick={() => {
+              props.onUpdate(user);
+            }}
+          >
             <IconEdit />
           </ActionIcon>
-          <ActionIcon onClick={() => {props.onDelete(user)}} bg={"red"}>
-            <IconTrash/>
+          <ActionIcon
+            onClick={() => {
+              props.onDelete(user);
+            }}
+            bg={"red"}
+          >
+            <IconTrash />
           </ActionIcon>
         </Flex>
       </Table.Td>
@@ -45,6 +53,7 @@ function UsersTable(props: IUsersTableProps) {
           <Table>
             <Table.Thead>
               <Table.Tr>
+                <Table.Th>ID</Table.Th>
                 <Table.Th>First Name</Table.Th>
                 <Table.Th>Last Name</Table.Th>
                 <Table.Th>Phone Number</Table.Th>

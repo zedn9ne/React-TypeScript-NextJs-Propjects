@@ -7,20 +7,20 @@ import UsersTable from "../04-components/UsersTable";
 import DeleteUserModal, {
   IDeleteUserModalRef,
 } from "../04-components/DeleteUserModal";
-import { addUser, searchUsers } from "../03-services/userServices";
+import { addUser, deleteUser, searchUsers } from "../03-services/userServices";
 
 const Users = () => {
   const [users, setUsers] = useState<IUser[]>([]);
 
   // Load Users +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const loadUsers = () => {
-   const dbUsers = searchUsers({})
-   setUsers([...dbUsers])
+    const dbUsers = searchUsers({});
+    setUsers([...dbUsers]);
   };
 
-  useEffect(()=>{
-    loadUsers()
-  },[])
+  useEffect(() => {
+    loadUsers();
+  }, []);
 
   //   Add Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const handleAddUser = (addedUser: IUser) => {
@@ -28,7 +28,7 @@ const Users = () => {
     tmp.push(addedUser);
     setUsers([...tmp]);
 
-    addUser(addedUser)
+    addUser(addedUser);
   };
 
   //   Update Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -45,7 +45,6 @@ const Users = () => {
 
   //   Delete Users +++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const deleteUserModalRef = useRef<IDeleteUserModalRef>(null);
-
   const handleDeleteUser = (deletingUser: IUser) => {
     deleteUserModalRef.current?.Open(deletingUser);
   };
@@ -77,6 +76,7 @@ const Users = () => {
           }
 
           setUsers([...tmp]);
+          deleteUser(deletingUser.id);
         }}
       />
     </>
