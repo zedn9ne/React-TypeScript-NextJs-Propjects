@@ -1,6 +1,16 @@
 import { IUser } from "@/features/users/01-models/userModels";
+import validator from "validator";
 
 import { useId } from "react";
+
+function getUsersFromLocalStorage() {
+  const usersString = localStorage.getItem("allUsers") ?? "[]";
+  const users = JSON.parse(usersString) as IUser[];
+  return users;
+}
+function saveUsersToLocalStorage(users: IUser[]) {
+  localStorage.setItem("allUsers", JSON.stringify(users));
+}
 
 export interface ISearchUsers {
   fullName?: string;
@@ -10,47 +20,46 @@ export interface ISearchUsers {
 }
 
 export const addUser = (newUser: IUser): void => {
-  const usersString = localStorage.getItem("allUsers") ?? "[]";
-  const users = JSON.parse(usersString);
+  const users = getUsersFromLocalStorage();
   users.push(newUser);
-  localStorage.setItem("allUsers", JSON.stringify(users));
+  saveUsersToLocalStorage(users);
 };
 
 export const getUserById = (userId: string): IUser | undefined => {
-  const userString = localStorage.getItem("allUsers") ?? "";
-  const users = JSON.parse(userString) as IUser[];
+  const users = getUsersFromLocalStorage();
+
   const user = users.find((user) => user.id === userId);
   return user;
 };
 
 export const deleteUser = (userId: string): boolean => {
-  const users = JSON.parse(localStorage.getItem("allUsers") ?? "[]") as IUser[];
+  const users = getUsersFromLocalStorage();
+
   const userIndex = users.findIndex((user) => user.id === userId);
   if (userIndex >= 0) {
     users.splice(userIndex, 1);
   }
-  localStorage.setItem("allUsers", JSON.stringify(users));
+  saveUsersToLocalStorage(users);
   return true;
 };
 
 export const updateUser = (updateUser: IUser): IUser | undefined => {
-  const userString = localStorage.getItem("allUsers") ?? "";
-  const users = JSON.parse(userString) as IUser[];
+  const users = getUsersFromLocalStorage();
+
   const userIndex = users.findIndex((user) => user.id === updateUser.id);
 
   if (userIndex >= 0) {
     let user = users.at(userIndex);
     user = { ...updateUser };
-    localStorage.setItem("allUser", JSON.stringify(user));
+    saveUsersToLocalStorage(users);
     return user;
   }
   return undefined;
 };
 
 export const searchUsers = (searchUser: ISearchUsers): IUser[] => {
-  const userString = localStorage.getItem("allUsers") ?? "[]";
-  const users = JSON.parse(userString) as IUser[];
- 
+  const users = getUsersFromLocalStorage();
+
   let foundedUser: IUser[] = users;
 
   if (searchUser.fullName) {
@@ -78,4 +87,36 @@ export const searchUsers = (searchUser: ISearchUsers): IUser[] => {
   }
 
   return foundedUser;
+};
+
+export const isValidate = (user: IUser): void => {
+  if (validator.isLength(user.name, { max: 2 })) {
+    const message = "Incorrect";
+  }
+  if (validator.isLength(user.lastName, { max: 2 })) {
+    const message = "Incorrect";
+  }
+  if (validator.isMobilePhone(user.phoneNumber, "ir-IR")) {
+    const correctMessage = "Correct";
+  } else {
+    const incorrectMessage = "Incorrect";
+  }
+  if (validator.isEmail(user.email)) {
+    const correctMessage = "Correct";
+  } else {
+    const incorrectMessage = "Incorrect";
+  }
+  if (
+    validator.isStrongPassword(user.password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
+  ) {
+    const correctMessage = "Correct";
+  } else {
+    const incorrectMessage = "Incorrect";
+  }
 };

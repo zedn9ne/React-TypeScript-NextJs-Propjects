@@ -1,9 +1,10 @@
 "use client";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Center, TextInput, Flex } from "@mantine/core";
-import { useState } from "react";
+import { use, useState } from "react";
 import { IUser } from "../01-models/userModels";
-import {v4 as uuidV4, v4} from "uuid"
+import { v4 as uuidV4, v4 } from "uuid";
+import validator from "validator";
 
 export interface IAddUser {
   onAddUser: (user: IUser) => void;
@@ -16,6 +17,7 @@ function AddModal(props: IAddUser) {
     lastName: "",
     phoneNumber: "",
     email: "",
+    password: "",
   });
 
   const handleAdd = () => {
@@ -25,7 +27,27 @@ function AddModal(props: IAddUser) {
       lastName: "",
       phoneNumber: "",
       email: "",
+      password: "",
     });
+  };
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const validate = (value: string) => {
+    if (
+      validator.isStrongPassword(value, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      setErrorMessage("");
+      return true;
+    } else {
+      setErrorMessage("Is Not Strong Password");
+      return false;
+    }
   };
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -63,11 +85,29 @@ function AddModal(props: IAddUser) {
             value={user.email}
             onChange={(e) => setUser({ ...user, email: e.currentTarget.value })}
           />
+          <TextInput
+            placeholder="Enter Your Password"
+            label="Password"
+            value={user.password}
+            onChange={(e) =>
+              setUser({ ...user, password: e.currentTarget.value })
+            }
+            error={errorMessage}
+          />
           <Button
             w={"5rem"}
             onClick={() => {
-              props.onAddUser(user);
-              setUser({name : "" , lastName : "" , phoneNumber : "" , email : "" , id : ""})
+              if (validate(user.password)) {
+                props.onAddUser(user);
+                setUser({
+                  name: "",
+                  lastName: "",
+                  phoneNumber: "",
+                  email: "",
+                  id: "",
+                  password: "",
+                });
+              } 
             }}
           >
             Add
