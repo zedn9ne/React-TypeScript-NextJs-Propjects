@@ -28,7 +28,7 @@ const Users = () => {
     tmp.push(addedUser);
     setUsers([...tmp]);
 
-    // addUser(addedUser);
+    addUser(addedUser);
   };
 
   //   Update Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++

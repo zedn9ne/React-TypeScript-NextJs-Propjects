@@ -45,10 +45,15 @@ function AddModal(props: IAddUser) {
       setErrorMessage("");
       return true;
     } else {
-      setErrorMessage("Is Not Strong Password");
+      setErrorMessage(
+        "Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.",
+      );
       return false;
     }
   };
+  const emailValidate = (value : string) => {
+    if (validator.isEmail(value , ))
+  }
 
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -107,7 +112,8 @@ function AddModal(props: IAddUser) {
                   id: "",
                   password: "",
                 });
-              } 
+                alert("کاربر با موفقیت اضافه شد !");
+              }
             }}
           >
             Add
